@@ -38,7 +38,6 @@ lagos <- lagosne_load()
 lake_centers <- lagos$locus
 
 
-
 ```
 
 
@@ -99,34 +98,15 @@ minnesota_lakes %>%
 ## 1) Show a map outline of Iowa and Illinois (similar to Minnesota map upstream)
 
 ```{r}
-#Iowa
 #Plot all the states to check if they loaded
 #mapview(states)
-Iowa <- states %>%
-  filter(name == 'Iowa') %>%
+Icombined <- states %>%
+  filter(name %in% c('Illinois', 'Iowa')) %>%
   st_transform(2163)
 
-#Subset lakes based on spatial position
-iowa_lakes <- spatial_lakes[Iowa,]
+I_lakes <- spatial_lakes[Icombined,]
 
-#Plotting the first 1000 lakes
-iowa_lakes %>%
-  arrange(-lake_area_ha) %>%
-    slice(1:1000) %>%
-  mapview(.,zcol = 'lake_area_ha')
-
-#Illinois
-#Plot all the states to check if they loaded
-#mapview(states)
-Illinois <- states %>%
-  filter(name == 'Illinois') %>%
-  st_transform(2163)
-
-#Subset lakes based on spatial position
-illinois_lakes <- spatial_lakes[Illinois,]
-
-#Plotting the first 1000 lakes
-illinois_lakes %>%
+I_lakes %>%
   arrange(-lake_area_ha) %>%
     slice(1:1000) %>%
   mapview(.,zcol = 'lake_area_ha')
@@ -139,6 +119,9 @@ illinois_lakes %>%
 combined? How does this compare to Minnesota?
 
 ```{r}
+
+
+
 
 ```
 
