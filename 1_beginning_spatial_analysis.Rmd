@@ -98,7 +98,6 @@ minnesota_lakes %>%
 ## 1) Show a map outline of Iowa and Illinois (similar to Minnesota map upstream)
 
 ```{r}
-#Plot all the states to check if they loaded
 #mapview(states)
 Icombined <- states %>%
   filter(name %in% c('Illinois', 'Iowa')) %>%
@@ -106,40 +105,32 @@ Icombined <- states %>%
 
 I_lakes <- spatial_lakes[Icombined,]
 
-I_lakes %>%
-  arrange(-lake_area_ha) %>%
-    slice(1:1000) %>%
-  mapview(.,zcol = 'lake_area_ha')
-
-```
-
-
-
-## 2) Subset LAGOS data to these sites, how many sites are in Illinois and Iowa
-combined? How does this compare to Minnesota?
-
-```{r}
 #Iowa
 Iowa <- states %>%
   filter(name == 'Iowa') %>%
   st_transform(2163)
-
-iowa_lakes <- spatial_lakes[Iowa,]
 
 #Illinois
 Illinois <- states %>%
   filter(name == 'Illinois') %>%
   st_transform(2163)
 
-illinois_lakes <- spatial_lakes[Illinois,]
-
 #rbind states
 IA_IL<-rbind(Iowa,Illinois)
 mapview(IA_IL)
 
+```
+
+
+
+## 2) Subset LAGOS data to these sites, how many sites are in Illinois and Iowa  combined? How does this compare to Minnesota?
+
+```{r}
+illinois_lakes <- spatial_lakes[Illinois,]
+iowa_lakes <- spatial_lakes[Iowa,]
+
 #rbind lake data
 IA_IL2<-rbind(iowa_lakes, illinois_lakes)
-
 
 #count
 str(IA_IL2$lagoslakeid)
@@ -173,16 +164,17 @@ ggplot(minnesota_lakes, aes(x=lake_area_ha))+
 There are more larger lakes in Minnesota than in Iowa where the lakes are much smaller.
 
 
-## 4) Make an interactive plot of lakes in Iowa and Illinois and color them
-by lake area in hectares
+## 4) Make an interactive plot of lakes in Iowa and Illinois and color them  by lake area in hectares
 
 ```{r}
-
+I_lakes %>%
+  arrange(-lake_area_ha) %>%
+    slice(1:1000) %>%
+  mapview(.,zcol = 'lake_area_ha')
 
 ```
 
 
-## 5) What other data sources might we use to understand how reservoirs and 
-natural lakes vary in size in these three states? 
+## 5) What other data sources might we use to understand how reservoirs and  natural lakes vary in size in these three states? 
 
-
+Using information such as the perimeter or the lake and lake depth would give another source of data to compare the sizes of the lakes.
