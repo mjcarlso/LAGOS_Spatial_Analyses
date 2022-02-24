@@ -28,7 +28,7 @@ library(USAboundaries) #USA states and counties
 
 ```{r data-read}
 # #Lagos download script
-LAGOSNE::lagosne_get(dest_folder = LAGOSNE:::lagos_path())
+#LAGOSNE::lagosne_get(dest_folder = LAGOSNE:::lagos_path())
 
 
 #Load in lagos
@@ -119,11 +119,35 @@ I_lakes %>%
 combined? How does this compare to Minnesota?
 
 ```{r}
+#Iowa
+Iowa <- states %>%
+  filter(name == 'Iowa') %>%
+  st_transform(2163)
+
+iowa_lakes <- spatial_lakes[Iowa,]
+
+#Illinois
+Illinois <- states %>%
+  filter(name == 'Illinois') %>%
+  st_transform(2163)
+
+illinois_lakes <- spatial_lakes[Illinois,]
+
+#rbind states
+IA_IL<-rbind(Iowa,Illinois)
+mapview(IA_IL)
+
+#rbind lake data
+IA_IL2<-rbind(iowa_lakes, illinois_lakes)
 
 
-
+#count
+str(IA_IL2$lagoslakeid)
+str(minnesota_lakes$lagoslakeid)
 
 ```
+
+There are about twice as many lakes in Minnesota, 29038, as there are in Iowa and Illinois combined, 16466.
 
 
 ## 3) What is the distribution of lake size in Iowa vs. Minnesota?
@@ -132,15 +156,28 @@ combined? How does this compare to Minnesota?
 y axis (check out geom_histogram)
 
 ```{r}
+ggplot(iowa_lakes, aes(x=lake_area_ha))+
+  geom_histogram()+
+  scale_x_log10()+
+  labs(title = "Iowa",
+    x="log(lake area(ha))")
 
+ggplot(minnesota_lakes, aes(x=lake_area_ha))+
+  geom_histogram()+
+  scale_x_log10()+
+  labs(title = "Minnesota",
+    x="log(lake area (ha))")
 
 ```
+
+There are more larger lakes in Minnesota than in Iowa where the lakes are much smaller.
 
 
 ## 4) Make an interactive plot of lakes in Iowa and Illinois and color them
 by lake area in hectares
 
 ```{r}
+
 
 ```
 
