@@ -1,6 +1,6 @@
 ---
 title: "LAGOS Spatial Analysis"
-author: "Matthew Ross"
+author: "MJ Carlson"
 date: "9/11/2019"
 output: html_document
 editor_options: 
