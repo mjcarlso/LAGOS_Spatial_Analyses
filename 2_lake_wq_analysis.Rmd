@@ -1,6 +1,6 @@
 ---
 title: "Lake Water Quality Analysis"
-author: "Matthew Ross"
+author: "MJ Carlson"
 date: "9/17/2019"
 output: html_document
 ---
