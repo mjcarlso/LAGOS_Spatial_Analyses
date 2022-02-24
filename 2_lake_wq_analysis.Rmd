@@ -107,7 +107,9 @@ mean_values_200 <- chla_secchi_200 %>%
   filter(!is.na(mean_chl),
          !is.na(mean_secchi)) %>%
   # Take the log base 10 of the mean_chl
-  mutate(log10_mean_chl = log10(mean_chl))
+  mutate(log10_mean_chl = log10(mean_chl))%>%
+  #Take the log base 10 of the mean_secchi
+  mutate(log10_mean_secchi = log10(mean_secchi))
 
 #Join datasets
 mean_spatial <- inner_join(spatial_lakes,mean_values_200,
@@ -140,37 +142,58 @@ When there is more chlorophyll in the water it is more turbid and therefore hard
 
 ## 2) What states have the most data? 
 
-### 2a) First you will need to make a lagos spatial dataset that has the total 
-number of counts per site.
+### 2a) First you will need to make a lagos spatial dataset that has the total  number of counts per site.
 
-```{r}
+```{r, warning=FALSE}
 ## Your code here
+site_counts<-nutr%>%
+  group_by(lagoslakeid)%>%
+  summarize(count = n())
 
+spatial_counts<-inner_join(spatial_lakes, site_counts%>%
+                             distinct(lagoslakeid,.keep_all = T),
+                           by = "lagoslakeid")
 
 ```
 
 
-### 2b) Second, you will need to join this point dataset to the us_boundaries 
-data. 
+### 2b) Second, you will need to join this point dataset to the us_boundaries  data. 
 
-```{r}
+```{r, warning=F}
 ## Your code here
+states_lagos<-lagos$state
+
+states_lakes <- inner_join(spatial_counts, states_lagos, by="state_zoneid")
 ```
 
 
-### 2c) Then you will want to group by state and sum all the observations in that
-state and arrange that data from most to least toatl observations per state. 
+### 2c) Then you will want to group by state and sum all the observations in  that state and arrange that data from most to least toatl observations per state. 
 
 ```{r}
 ## Your code here. 
+sum_states<-states_lakes%>%
+  as.data.frame()%>%
+  select(-geometry)%>%
+  group_by(state_name)%>%
+  summarize(sum_counts = sum(count))%>%
+  arrange(desc(sum_counts))
+
+head(sum_states)
 ```
 
-##3 Is there a spatial pattern in Secchi disk depth for lakes with at least 200 
-observations?
+Minnesota has the most data followed by Wisconsin and Michigan
+
+##3 Is there a spatial pattern in Secchi disk depth for lakes with at least 200  observations?
 
 ```{r}
 ## Your code here
+mean_spatial%>%
+  arrange(-mean_secchi) %>%
+  mapview(.,zcol = 'mean_secchi')
+
+mapview(mean_spatial,zcol='log10_mean_secchi')
 
 ```
+
 
 
